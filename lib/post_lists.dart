@@ -21,14 +21,15 @@ class PostLists extends StatefulWidget {
 
 class _PostPageState extends State<PostLists> {
   TextEditingController name = TextEditingController();
+
   bool isFavorite = false;
   bool favouriteClicked = false;
-
+  List favoritePosts = [];
   final channel =
       IOWebSocketChannel.connect('ws://besquare-demo.herokuapp.com');
 
   List posts = [];
-  List favoritePosts = [];
+
   String id = '';
   void getPosts() {
     channel.stream.listen((message) {
@@ -58,186 +59,327 @@ class _PostPageState extends State<PostLists> {
     return BlocProvider(
       create: (context) => MainCubit(),
       child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.black,
-          appBar: AppBar(
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      if (favouriteClicked == true) {
-                        favouriteClicked = false;
-                      } else {
-                        favouriteClicked = true;
-                      }
-                    });
-                  },
-                  icon: Icon(Icons.favorite_outlined)),
-              IconButton(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          actions: [
+            IconButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => CreatePost(channel: channel)));
+                  setState(() {
+                    if (favouriteClicked == true) {
+                      favouriteClicked = false;
+                    } else {
+                      favouriteClicked = true;
+                    }
+                  });
                 },
-                icon: Icon(Icons.add),
-              ),
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
+                icon: Icon(Icons.favorite_outlined)),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AboutPage()),
-                  );
-                },
-                icon: Icon(Icons.info),
-              ),
-            ],
-            title: Center(
-              child: Text(
-                'MYBLOGPOST',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+                    MaterialPageRoute(
+                        builder: (_) => CreatePost(channel: channel)));
+              },
+              icon: Icon(Icons.add),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutPage()),
+                );
+              },
+              icon: Icon(Icons.info),
+            ),
+          ],
+          title: Center(
+            child: Text(
+              'MYBLOGPOST',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
             ),
-            backgroundColor: Colors.redAccent,
           ),
-          body:
-              // (favouriteClicked == false) ?
-              BlocBuilder<MainCubit, String>(
-            builder: (context, index) {
-              return ListView.builder(
-                  itemCount: posts.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.blueAccent,
-                      elevation: 10.0,
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PostDetails(
-                                name: posts[index]['author'],
-                                title: posts[index]['title'],
-                                description: posts[index]['description'],
-                                url: posts[index]['image'],
-                              ),
-                            ),
-                          );
-                          // Move to post details page
-                        },
-                        onLongPress: () {
-                          //to delete
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return BlocProvider(
-                                  create: (context) => MainCubit(),
-                                  child: BlocBuilder<MainCubit, String>(
-                                    builder: (context, state) {
-                                      return AlertDialog(
-                                        title: const Text("Delete Post"),
-                                        content: Column(
-                                          // ignore: prefer_const_literals_to_create_immutables
-                                          children: [
-                                            TextFormField(
-                                              controller: name,
+          backgroundColor: Colors.redAccent,
+        ),
+        body: (favouriteClicked == false)
+            ? BlocBuilder<MainCubit, String>(
+                builder: (context, index) {
+                  return ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.blueAccent,
+                          elevation: 10.0,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PostDetails(
+                                    name: posts[index]['author'],
+                                    title: posts[index]['title'],
+                                    description: posts[index]['description'],
+                                    url: posts[index]['image'],
+                                  ),
+                                ),
+                              );
+                              // Move to post details page
+                            },
+                            onLongPress: () {
+                              //to delete
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlocProvider(
+                                      create: (context) => MainCubit(),
+                                      child: BlocBuilder<MainCubit, String>(
+                                        builder: (context, state) {
+                                          return AlertDialog(
+                                            title: const Text("Delete Post"),
+                                            content: Column(
+                                              // ignore: prefer_const_literals_to_create_immutables
+                                              children: [
+                                                TextFormField(
+                                                  controller: name,
+                                                ),
+                                                Text(
+                                                    "Do you want to delete this post?"),
+                                              ],
                                             ),
-                                            Text(
-                                                "Do you want to delete this post?"),
-                                          ],
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                deletePost(
-                                                    '${posts[index]['_id']}',
-                                                    name.text);
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    deletePost(
+                                                        '${posts[index]['_id']}',
+                                                        name.text);
 
-                                                Navigator.of(context).pop();
-                                              });
-                                            },
-                                            child: Text('Delete'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text("Cancel"),
-                                          )
-                                        ],
-                                      );
-                                    },
+                                                    Navigator.of(context).pop();
+                                                  });
+                                                },
+                                                child: Text('Delete'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Cancel"),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(0),
+                                margin: EdgeInsets.all(0.0),
+                                height: 200,
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 45.0,
+                                    backgroundImage: NetworkImage(Uri.parse(
+                                                    posts[index]['image'])
+                                                .isAbsolute &&
+                                            posts[index].containsKey('image')
+                                        ? '${posts[index]['image']}'
+                                        : 'https://image.freepik.com/free-vector/bye-bye-cute-emoji-cartoon-character-yellow-backround_106878-540.jpg'),
                                   ),
-                                );
-                              });
-                        },
-                        child: Container(
-                            padding: EdgeInsets.all(0),
-                            margin: EdgeInsets.all(0.0),
-                            height: 200,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 45.0,
-                                backgroundImage: NetworkImage(Uri.parse(
-                                                posts[index]['image'])
-                                            .isAbsolute &&
-                                        posts[index].containsKey('image')
-                                    ? '${posts[index]['image']}'
-                                    : 'https://image.freepik.com/free-vector/bye-bye-cute-emoji-cartoon-character-yellow-backround_106878-540.jpg'),
-                              ),
-                              title: Text(
-                                '${posts[index]["title"].toString().characters.take(20)}',
-                                style: const TextStyle(
-                                    fontSize: 22, fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                'Created by ${posts[index]["author"].toString().characters.take(15)} on ${posts[index]["date"].toString().characters.take(10)}',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_forever),
-                                    color: Colors.black,
-                                    onPressed: () {
-                                      id = posts[index]["_id"];
-                                      print(id);
-                                      widget.channel.sink.add(
-                                          '{"type":"delete_post","data":{"postId": "$id"}}');
-                                    },
+                                  title: Text(
+                                    '${posts[index]["title"].toString().characters.take(20)}',
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  FavoriteButton(
-                                      iconSize: 30.0,
-                                      valueChanged: (isFavorite) {
-                                        setState(() {
-                                          isFavorite = true;
-                                          if (favoritePosts
-                                              .contains(posts[index])) {
-                                            favoritePosts.remove(posts[index]);
-                                            print('item already added');
-                                          } else {
-                                            favoritePosts.add(posts[index]);
-                                          }
-                                          print(favoritePosts);
-                                        });
-                                      }),
-                                ],
-                              ),
-                            )),
-                      ),
-                    );
-                  });
-            },
-          )),
+                                  subtitle: Text(
+                                    'Created by ${posts[index]["author"].toString().characters.take(15)} on ${posts[index]["date"].toString().characters.take(10)}',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  trailing: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_forever),
+                                        color: Colors.black,
+                                        onPressed: () {
+                                          id = posts[index]["_id"];
+                                          print(id);
+                                          widget.channel.sink.add(
+                                              '{"type":"delete_post","data":{"postId": "$id"}}');
+                                        },
+                                      ),
+                                      FavoriteButton(
+                                          iconSize: 30.0,
+                                          valueChanged: (isFavorite) {
+                                            setState(() {
+                                              isFavorite = true;
+                                              if (favoritePosts
+                                                  .contains(posts[index])) {
+                                                favoritePosts
+                                                    .remove(posts[index]);
+                                                print('item already added');
+                                              } else {
+                                                favoritePosts.add(posts[index]);
+                                              }
+                                              print(favoritePosts);
+                                            });
+                                          }),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        );
+                      });
+                },
+              )
+            : BlocBuilder<MainCubit, String>(
+                builder: (context, index) {
+                  print(favoritePosts.length);
+                  return ListView.builder(
+                      itemCount: favoritePosts.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.blueAccent,
+                          elevation: 10.0,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PostDetails(
+                                    name: posts[index]['author'],
+                                    title: posts[index]['title'],
+                                    description: posts[index]['description'],
+                                    url: posts[index]['image'],
+                                  ),
+                                ),
+                              );
+                              // Move to post details page
+                            },
+                            onLongPress: () {
+                              //to delete
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return BlocProvider(
+                                      create: (context) => MainCubit(),
+                                      child: BlocBuilder<MainCubit, String>(
+                                        builder: (context, state) {
+                                          return AlertDialog(
+                                            title: const Text("Delete Post"),
+                                            content: Column(
+                                              // ignore: prefer_const_literals_to_create_immutables
+                                              children: [
+                                                TextFormField(
+                                                  controller: name,
+                                                ),
+                                                Text(
+                                                    "Do you want to delete this post?"),
+                                              ],
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  setState(() {
+                                                    deletePost(
+                                                        '${posts[index]['_id']}',
+                                                        name.text);
+
+                                                    Navigator.of(context).pop();
+                                                  });
+                                                },
+                                                child: Text('Delete'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text("Cancel"),
+                                              )
+                                            ],
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  });
+                            },
+                            child: Container(
+                                padding: EdgeInsets.all(0),
+                                margin: EdgeInsets.all(0.0),
+                                height: 200,
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 30.0,
+                                    backgroundImage: NetworkImage(Uri.parse(
+                                                    posts[index]['image'])
+                                                .isAbsolute &&
+                                            posts[index].containsKey('image')
+                                        ? '${posts[index]['image']}'
+                                        : 'https://image.freepik.com/free-vector/bye-bye-cute-emoji-cartoon-character-yellow-backround_106878-540.jpg'),
+                                  ),
+                                  title: Text(
+                                    '${posts[index]["title"].toString().characters.take(20)}',
+                                    style: const TextStyle(
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    'Created by ${posts[index]["author"].toString().characters.take(15)} on ${posts[index]["date"].toString().characters.take(10)}',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  trailing: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_forever),
+                                        color: Colors.black,
+                                        onPressed: () {
+                                          id = posts[index]["_id"];
+                                          print(id);
+                                          widget.channel.sink.add(
+                                              '{"type":"delete_post","data":{"postId": "$id"}}');
+                                        },
+                                      ),
+                                      FavoriteButton(
+                                          iconSize: 30.0,
+                                          valueChanged: (isFavorite) {
+                                            setState(() {
+                                              isFavorite = true;
+                                              if (favoritePosts
+                                                  .contains(posts[index])) {
+                                                favoritePosts
+                                                    .remove(posts[index]);
+                                                print('item already added');
+                                              } else {
+                                                favoritePosts.add(posts[index]);
+                                              }
+                                              print(favoritePosts);
+                                            });
+                                          }),
+                                    ],
+                                  ),
+                                )),
+                          ),
+                        );
+                      });
+                },
+              ),
+      ),
     );
   }
 
