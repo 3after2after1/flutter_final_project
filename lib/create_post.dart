@@ -1,20 +1,22 @@
-// ignore_for_file: file_names, prefer_const_constructors, avoid_print
 import 'package:final_project/cubit/main_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class CreatePost extends StatefulWidget {
-  const CreatePost({Key? key}) : super(key: key);
+  const CreatePost({Key? key, required this.channel}) : super(key: key);
+  final WebSocketChannel channel;
 
   @override
-  _PostDetailsPageState createState() => _PostDetailsPageState();
+  State<StatefulWidget> createState() => _CreatePost(channel);
 }
 
-class _PostDetailsPageState extends State<CreatePost> {
+class _CreatePost extends State<CreatePost> {
+  _CreatePost(this.channel);
+  WebSocketChannel channel;
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController image = TextEditingController();
-  TextEditingController username = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class _PostDetailsPageState extends State<CreatePost> {
                         hintText: 'Post title',
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       height: 20.0,
                     ),
                     Text(
@@ -67,7 +69,7 @@ class _PostDetailsPageState extends State<CreatePost> {
                         hintText: 'Image description',
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       height: 20.0,
                     ),
                     Text(
@@ -85,25 +87,25 @@ class _PostDetailsPageState extends State<CreatePost> {
                         hintText: 'Image URL',
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       height: 20.0,
                     ),
-                    Text(
-                      'Author Name',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        fontStyle: FontStyle.italic,
-                        color: Colors.purple.shade800,
-                      ),
-                    ),
-                    TextFormField(
-                      controller: username,
-                      decoration: const InputDecoration(
-                        hintText: 'Author Name',
-                      ),
-                    ),
-                    Divider(
+                    // Text(
+                    //   'Author Name',
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.bold,
+                    //     fontSize: 24,
+                    //     fontStyle: FontStyle.italic,
+                    //     color: Colors.purple.shade800,
+                    //   ),
+                    // ),
+                    // TextFormField(
+                    //   controller: username,
+                    //   decoration: const InputDecoration(
+                    //     hintText: 'Author Name',
+                    //   ),
+                    // ),
+                    const Divider(
                       height: 20.0,
                     ),
                   ],
@@ -115,12 +117,12 @@ class _PostDetailsPageState extends State<CreatePost> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      context.read<MainCubit>().createPost(username.text,
-                          title.text, description.text, image.text);
+                      context.read<MainCubit>().createPost(
+                          title.text, description.text, image.text, channel);
 
-                      Navigator.popAndPushNamed(context, '/postpage');
+                      Navigator.pop(context);
                     },
-                    child: Text('Create'),
+                    child: const Text('Create'),
                   ),
                 ],
               )

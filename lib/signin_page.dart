@@ -1,8 +1,8 @@
 import 'package:final_project/cubit/main_cubit.dart';
+import 'package:final_project/post_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
@@ -64,7 +64,7 @@ class SignInPage extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
-                        style: TextButton.styleFrom(
+                        style: OutlinedButton.styleFrom(
                           primary: Colors.black,
                           backgroundColor: Colors.blue,
                           shape: RoundedRectangleBorder(
@@ -80,9 +80,12 @@ class SignInPage extends StatelessWidget {
                               : {
                                   context
                                       .read<MainCubit>()
-                                      .login(username.text),
-                                  Navigator.popAndPushNamed(
-                                      context, '/postlists'),
+                                      .login(username.text, channel),
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              PostLists(channel: channel))),
                                 };
                         },
                       ),

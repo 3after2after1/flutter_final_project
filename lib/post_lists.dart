@@ -2,15 +2,18 @@
 
 import 'dart:convert';
 import 'package:final_project/about_page.dart';
+import 'package:final_project/create_post.dart';
 import 'package:final_project/post_details.dart';
 import 'package:final_project/cubit/main_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:favorite_button/favorite_button.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class PostLists extends StatefulWidget {
-  const PostLists({Key? key}) : super(key: key);
+  const PostLists({Key? key, required this.channel}) : super(key: key);
+  final WebSocketChannel channel;
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -33,14 +36,9 @@ class _PostPageState extends State<PostLists> {
       setState(() {
         posts = decodedMessage['data']['posts'];
       });
-      channel.sink.close();
     });
 
     channel.sink.add('{"type": "get_posts"}');
-  }
-
-  sortDate() {
-    for (int i = 0; i >= posts.length; i++) {}
   }
 
   @override
@@ -60,6 +58,7 @@ class _PostPageState extends State<PostLists> {
     return BlocProvider(
       create: (context) => MainCubit(),
       child: Scaffold(
+          backgroundColor: Colors.black,
           appBar: AppBar(
             actions: [
               IconButton(
@@ -75,7 +74,10 @@ class _PostPageState extends State<PostLists> {
                   icon: Icon(Icons.favorite_outlined)),
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/createpost');
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => CreatePost(channel: channel)));
                 },
                 icon: Icon(Icons.add),
               ),
@@ -175,7 +177,7 @@ class _PostPageState extends State<PostLists> {
                         },
                         child: Container(
                             padding: EdgeInsets.all(10.0),
-                            height: 100,
+                            height: 120,
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 45.0,

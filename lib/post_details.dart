@@ -19,8 +19,11 @@ class PostDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
-      appBar: AppBar(title: const Text('Post Details')),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: const Text('Post Details'),
+        backgroundColor: Colors.orange,
+      ),
       body: ListView(
         children: [
           Column(
