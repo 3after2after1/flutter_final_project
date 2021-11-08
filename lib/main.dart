@@ -2,9 +2,7 @@
 
 import 'package:final_project/post_details.dart';
 import 'package:final_project/about_page.dart';
-
 import 'package:final_project/cubit/main_cubit.dart';
-
 import 'package:final_project/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
