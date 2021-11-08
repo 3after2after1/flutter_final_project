@@ -8,16 +8,6 @@ class MainCubit extends Cubit<String> {
   var username = '';
   dynamic decodedMessage;
 
-  // final channel =
-  //     IOWebSocketChannel.connect('ws://besquare-demo.herokuapp.com');
-
-  // void openChannel() {
-  //   channel.stream.listen((message) {
-  //     decodedMessage = jsonDecode(message);
-  //     print(decodedMessage);
-  //   });
-  // }
-
   void login(name, channel) {
     username = name;
     channel.sink.add('{"type": "sign_in", "data": {"name": "$username"}}');

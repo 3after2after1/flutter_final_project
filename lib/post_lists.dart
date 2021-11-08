@@ -29,7 +29,7 @@ class _PostPageState extends State<PostLists> {
 
   List posts = [];
   List favoritePosts = [];
-
+  String id = '';
   void getPosts() {
     channel.stream.listen((message) {
       final decodedMessage = jsonDecode(message);
@@ -58,6 +58,7 @@ class _PostPageState extends State<PostLists> {
     return BlocProvider(
       create: (context) => MainCubit(),
       child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.black,
           appBar: AppBar(
             actions: [
@@ -176,8 +177,9 @@ class _PostPageState extends State<PostLists> {
                               });
                         },
                         child: Container(
-                            padding: EdgeInsets.all(10.0),
-                            height: 120,
+                            padding: EdgeInsets.all(0),
+                            margin: EdgeInsets.all(0.0),
+                            height: 200,
                             child: ListTile(
                               leading: CircleAvatar(
                                 radius: 45.0,
@@ -199,9 +201,20 @@ class _PostPageState extends State<PostLists> {
                                     fontSize: 15, fontWeight: FontWeight.bold),
                               ),
                               trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.delete_forever),
+                                    color: Colors.black,
+                                    onPressed: () {
+                                      id = posts[index]["_id"];
+                                      print(id);
+                                      widget.channel.sink.add(
+                                          '{"type":"delete_post","data":{"postId": "$id"}}');
+                                    },
+                                  ),
                                   FavoriteButton(
                                       iconSize: 30.0,
                                       valueChanged: (isFavorite) {
