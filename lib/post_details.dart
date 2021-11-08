@@ -19,10 +19,12 @@ class PostDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white70,
       appBar: AppBar(title: const Text('Post Details')),
       body: ListView(
         children: [
           Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
                 padding: const EdgeInsets.only(
@@ -35,25 +37,28 @@ class PostDetails extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 40,
-                    color: Colors.purple,
-                    fontWeight: FontWeight.w700,
+                child: Card(
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 40,
+                      color: Colors.purple,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20),
-                child: Flexible(
+                child: Card(
                   child: Text(
                     description,
                     style: TextStyle(
                       fontSize: 20,
                       color: Colors.black87,
                     ),
-                    textAlign: TextAlign.justify,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),

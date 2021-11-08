@@ -178,7 +178,7 @@ class _PostPageState extends State<PostLists> {
                             height: 100,
                             child: ListTile(
                               leading: CircleAvatar(
-                                radius: 30.0,
+                                radius: 45.0,
                                 backgroundImage: NetworkImage(Uri.parse(
                                                 posts[index]['image'])
                                             .isAbsolute &&
@@ -192,7 +192,10 @@ class _PostPageState extends State<PostLists> {
                                     fontSize: 22, fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                  'Created by ${posts[index]["author"].toString().characters.take(15)} on ${posts[index]["date"].toString().characters.take(10)}'),
+                                'Created by ${posts[index]["author"].toString().characters.take(15)} on ${posts[index]["date"].toString().characters.take(10)}',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
                               trailing: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,

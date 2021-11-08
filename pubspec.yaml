@@ -36,6 +36,7 @@ dependencies:
   web_socket_channel: ^2.1.0
   flutter_bloc: ^7.3.3
   favorite_button: ^0.0.4
+  google_fonts: ^2.1.0
 
 dev_dependencies:
   flutter_test:
