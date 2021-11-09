@@ -29,30 +29,33 @@ class AboutPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
-                  SizedBox(
-                    height: 100,
-                  ),
+                  SizedBox(height: 20),
                   Text(
                     'FEATURES OF APP:',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(height: 3),
                   Text('* View post of all users in a listview'),
-                  Text('* Click on specific post to have a more detailed view'),
-                  Text('* Create new post using the plus icon'),
-                  Text('* Delete posts created by current user'),
-                  Text('* View post of all users in a listview'),
+                  SizedBox(height: 3),
+                  Text('* Click on specific post to have a see more details'),
+                  SizedBox(height: 3),
+                  Text('* Create new post by clicking the plus icon'),
+                  SizedBox(height: 3),
+                  Text(
+                      '* Delete posts created by current user using the delete button'),
+                  SizedBox(height: 3),
+                  Text(
+                      '* Add post to favourites by clicking on favourite button'),
+                  SizedBox(height: 3),
                   Text(
                       '*************************************************************'),
-                  Text(
-                      '-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-'),
-                  Text('  '),
-                  Text('App developed By Bala from BeSquare'),
+                  SizedBox(height: 5),
+                  Text('App developed By Bala'),
                   Text('App version: v.1.0.2'),
+                  SizedBox(height: 5),
                   Text(
                       '*************************************************************'),
-                  SizedBox(
-                    height: 100,
-                  ),
+                  SizedBox(height: 50),
                 ],
               ),
             )

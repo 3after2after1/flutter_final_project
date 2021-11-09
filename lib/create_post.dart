@@ -8,6 +8,7 @@ class CreatePost extends StatefulWidget {
   final WebSocketChannel channel;
 
   @override
+  // ignore: no_logic_in_create_state
   State<StatefulWidget> createState() => _CreatePost(channel);
 }
 
@@ -90,21 +91,6 @@ class _CreatePost extends State<CreatePost> {
                     const Divider(
                       height: 20.0,
                     ),
-                    // Text(
-                    //   'Author Name',
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.bold,
-                    //     fontSize: 24,
-                    //     fontStyle: FontStyle.italic,
-                    //     color: Colors.purple.shade800,
-                    //   ),
-                    // ),
-                    // TextFormField(
-                    //   controller: username,
-                    //   decoration: const InputDecoration(
-                    //     hintText: 'Author Name',
-                    //   ),
-                    // ),
                     const Divider(
                       height: 20.0,
                     ),
@@ -113,7 +99,6 @@ class _CreatePost extends State<CreatePost> {
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.end,
-                // ignore: prefer_const_literals_to_create_immutables
                 children: [
                   ElevatedButton(
                     onPressed: () {

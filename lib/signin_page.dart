@@ -75,18 +75,16 @@ class SignInPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(100)),
                         ),
                         onPressed: () {
-                          (username.text.isEmpty)
-                              ? {print('username is empty')}
-                              : {
-                                  context
-                                      .read<MainCubit>()
-                                      .login(username.text, channel),
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) =>
-                                              PostLists(channel: channel))),
-                                };
+                          if (username.text.isEmpty) {
+                            context
+                                .read<MainCubit>()
+                                .login(username.text, channel);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) =>
+                                        PostLists(channel: channel)));
+                          }
                         },
                       ),
                     )

@@ -1,5 +1,3 @@
-// ignore_for_file: non_constant_identifier_names, avoid_print
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainCubit extends Cubit<String> {
@@ -12,10 +10,6 @@ class MainCubit extends Cubit<String> {
     username = name;
     channel.sink.add('{"type": "sign_in", "data": {"name": "$username"}}');
   }
-
-  // void getPosts() {
-  //   channel.sink.add('{"type": "get_posts"}');
-  // }
 
   void delete(_id, channel) {
     channel.sink.add('{"type": "delete_post", "data": {"postId": "$_id"}}');

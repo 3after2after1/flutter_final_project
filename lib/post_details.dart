@@ -1,4 +1,3 @@
-// ignore_for_file: file_names, prefer_const_constructors
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -57,7 +56,7 @@ class PostDetails extends StatelessWidget {
                 child: Card(
                   child: Text(
                     description,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       color: Colors.black87,
                     ),
